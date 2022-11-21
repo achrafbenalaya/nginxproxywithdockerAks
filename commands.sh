@@ -41,6 +41,22 @@ rm -r .terraform/
 ------------------------aks-------------------
 
 kubectl create -f ./my-namespace.yaml
-kubectl config set-context --current --namespace=hellonginxdotnet
+kubectl config set-context --current --namespace=ingress
+
+kubectl get services --namespace ingress
+
 kubectl apply -f 01-backend-deployment.yml -f 02-backend-clusterip-service.yml
 kubectl apply -f 03-frontend-deployment.yml -f 04-frontend-LoadBalancer-service.yml 
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+
+helm install app-ingress ingress-nginx/ingress-nginx `
+     --namespace ingress `
+     --create-namespace `
+     --set controller.replicaCount=1 `
+     --set controller.nodeSelector."kubernetes\.io/os"=linux `
+     --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
+
+     kubectl delete -f
