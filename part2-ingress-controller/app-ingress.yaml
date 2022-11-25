@@ -12,7 +12,7 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - himhelloworld.com
+    - yourdomain.com
     secretName: ingressdemo
   rules:
   - http:
@@ -45,7 +45,7 @@ spec:
               number: 80
         path: /webapp3(/|$)(.*)
         pathType: Prefix                          
-  - host: himhelloworld.com # change the IP address here
+  - host: yourdomain.com # change the IP address here
     http:
       paths:
       - backend:
