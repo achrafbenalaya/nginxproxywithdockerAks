@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 02-nginx-frontend
+  namespace: ingress  
+  labels:
+    app: 02-nginx-frontend
+    tier: frontend 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 02-nginx-frontend
+  template:
+    metadata:
+      labels:
+        app: 02-nginx-frontend
+        tier: frontend 
+    spec: 
+      containers:
+        - name: 02-nginx-frontend
+          image: ben2code/my_build:v1-release
+          ports:
+            - containerPort: 80        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx-service-02 ## VERY VERY IMPORTANT - NGINX PROXYPASS needs this name
+  labels:
+    app: 02-nginx-frontend
+    tier: frontend   
+spec:
+  selector:
+    app: 02-nginx-frontend
+  ports:
+    - name: http
+      port: 80 # ClusterIP Service Port
+      targetPort: 80 # Container Port
+  type: ClusterIP    
+  

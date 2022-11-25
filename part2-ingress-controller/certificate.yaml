@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tls-secret
+  namespace: default
+spec:
+  secretName: tls-secret
+  dnsNames:
+    - achraf.20.107.134.182.cloudapp.azure.com
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - achraf.20.107.134.182.cloudapp.azure.com
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
