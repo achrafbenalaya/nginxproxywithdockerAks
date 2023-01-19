@@ -44,11 +44,13 @@ kubectl apply -f ./my-namespace.yaml
 kubectl config set-context --current --namespace=ingress
 
 kubectl get services --namespace ingress
+ kubectl get deployments --namespace ingress
 
 kubectl apply -f 01-backend-deployment.yml -f 02-backend-clusterip-service.yml
 kubectl apply -f 03-frontend-deployment.yml -f 04-frontend-LoadBalancer-service.yml 
 
 kubectl apply -f 01-nginx-frontend.yml
+kubectl apply -f app-ingress.yml
 kubectl apply -f app-ingress.yml
 
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
@@ -62,6 +64,13 @@ helm install app-ingress ingress-nginx/ingress-nginx `
      --set controller.nodeSelector."kubernetes\.io/os"=linux `
      --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
 
+
+helm install app-ingress ingress-nginx/ingress-nginx `
+     --namespace ingress `
+     --create-namespace `
+     --set controller.replicaCount=1 `
+     --set controller.nodeSelector."kubernetes\.io/os"=linux `
+     --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
 
 #ssl
 
